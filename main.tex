@@ -54,139 +54,158 @@
 
 %%%% START
 
-\begin{frame}[fragile]{Motivation: start by stating the obvious}
-\vspace{0.15 cm}
-ROOT's selective reading is very important for analysis.
+%% \begin{frame}[fragile]{Motivation: start by stating the obvious}
+%% \vspace{0.15 cm}
+%% ROOT's selective reading is very important for analysis.
 
-\vspace{0.25 cm}
-Datasets have about a thousand branches\footnote{3116 ATLAS MC, 1717 ATLAS data, 2151 CMS MiniAOD, 675+ CMS NanoAOD, 560 LHCb}, so if you want to plot a quantity from a terabyte dataset with {\tt TTree::Draw}, you only have to read a few gigabytes from disk.
+%% \vspace{0.25 cm}
+%% Datasets have about a thousand branches\footnote{3116 ATLAS MC, 1717 ATLAS data, 2151 CMS MiniAOD, 675+ CMS NanoAOD, 560 LHCb}, so if you want to plot a quantity from a terabyte dataset with {\tt TTree::Draw}, you only have to read a few gigabytes from disk.
 
-\begin{uncoverenv}<2->
-\vspace{1 cm}
-Same for reading over a network (XRootD).
-\begin{verbatim}
-auto file = TFile::Open("root://very.far.away/mydata.root");
-\end{verbatim}
-\end{uncoverenv}
+%% \begin{uncoverenv}<2->
+%% \vspace{1 cm}
+%% Same for reading over a network (XRootD).
+%% \begin{verbatim}
+%% auto file = TFile::Open("root://very.far.away/mydata.root");
+%% \end{verbatim}
+%% \end{uncoverenv}
 
-\vspace{0.1 cm}
-\begin{uncoverenv}<3->
-\begin{center}
-\LARGE This is GREAT.
-\end{center}
-\end{uncoverenv}
-\end{frame}
+%% \vspace{0.1 cm}
+%% \begin{uncoverenv}<3->
+%% \begin{center}
+%% \LARGE This is GREAT.
+%% \end{center}
+%% \end{uncoverenv}
+%% \end{frame}
 
-\begin{frame}{Conversation with CS colleagues}
-\vspace{0.5 cm}
-\begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {So it sounds like you already have a columnar database.};
-\end{tikzpicture}
+%% \begin{frame}{Conversation with CS colleagues}
+%% \vspace{0.5 cm}
+%% \begin{tikzpicture}[>=latex]
+%% \node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {So it sounds like you already have a columnar database.};
+%% \end{tikzpicture}
 
-\vspace{0.25 cm}
-\begin{uncoverenv}<2->
-\hfill \begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(-200:-1 cm)}, text width=0.65\linewidth] {Not exactly--- we still have to manage data at the level of files, not columns.};
-\end{tikzpicture}
-\end{uncoverenv}
+%% \vspace{0.25 cm}
+%% \begin{uncoverenv}<2->
+%% \hfill \begin{tikzpicture}[>=latex]
+%% \node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(-200:-1 cm)}, text width=0.65\linewidth] {Not exactly--- we still have to manage data at the level of files, not columns.};
+%% \end{tikzpicture}
+%% \end{uncoverenv}
 
-\vspace{0.25 cm}
-\begin{uncoverenv}<3->
-\begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {Why? Couldn't you just use XRootD to move, backup, and cache columns directly? Why does it matter that they're inside of files?};
-\end{tikzpicture}
-\end{uncoverenv}
+%% \vspace{0.25 cm}
+%% \begin{uncoverenv}<3->
+%% \begin{tikzpicture}[>=latex]
+%% \node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {Why? Couldn't you just use XRootD to move, backup, and cache columns directly? Why does it matter that they're inside of files?};
+%% \end{tikzpicture}
+%% \end{uncoverenv}
 
-\vspace{0.25 cm}
-\begin{uncoverenv}<4->
-\hfill \begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=10 pt, callout relative pointer={(-200:-1 cm)}] {Because\ldots\ because\ldots};
-\end{tikzpicture}
-\end{uncoverenv}
-\end{frame}
+%% \vspace{0.25 cm}
+%% \begin{uncoverenv}<4->
+%% \hfill \begin{tikzpicture}[>=latex]
+%% \node[rectangle callout, draw, inner sep=10 pt, callout relative pointer={(-200:-1 cm)}] {Because\ldots\ because\ldots};
+%% \end{tikzpicture}
+%% \end{uncoverenv}
+%% \end{frame}
 
-\begin{frame}{Proof that it matters: CMS NanoAOD}
-\vspace{0.5 cm}
-\textcolor{darkblue}{\underline{Stated goal:}} {to serve 30--50\% of CMS analyses with a single selection of columns.}
+%% \begin{frame}{Proof that it matters: CMS NanoAOD}
+%% \vspace{0.5 cm}
+%% \textcolor{darkblue}{\underline{Stated goal:}} {to serve 30--50\% of CMS analyses with a single selection of columns.}
 
-\vspace{0.5 cm}
-Painful decisions need to be made to keep disk size down to 1--2~kB/event, to make data access faster for 50\% of analyses while excluding others.
+%% \vspace{0.5 cm}
+%% Painful decisions need to be made to keep disk size down to 1--2~kB/event, to make data access faster for 50\% of analyses while excluding others.
 
-\vspace{0.5 cm}
-\begin{columns}
-\column{0.55\linewidth}
-\begin{center}
-\uncover<2->{If we could really manage data at the columnar level, we could just put the most frequently used 1--2~kB/event in warm storage and the other 40~kB/event in cold storage.}
-\end{center}
+%% \vspace{0.5 cm}
+%% \begin{columns}
+%% \column{0.55\linewidth}
+%% \begin{center}
+%% \uncover<2->{If we could really manage data at the columnar level, we could just put the most frequently used 1--2~kB/event in warm storage and the other 40~kB/event in cold storage.}
+%% \end{center}
 
-\column{0.4\linewidth}
-\begin{center}
-\uncover<3->{Instead, we'll probably put the whole small copy (NanoAOD) in warm storage and the whole large copy (MiniAOD) in cold storage.}
-\end{center}
-\end{columns}
-\end{frame}
+%% \column{0.4\linewidth}
+%% \begin{center}
+%% \uncover<3->{Instead, we'll probably put the whole small copy (NanoAOD) in warm storage and the whole large copy (MiniAOD) in cold storage.}
+%% \end{center}
+%% \end{columns}
+%% \end{frame}
+
+%% \begin{frame}{}
+%% \vspace{0.5 cm}
+%% \begin{center}
+%% \large Except for the simplest cases, we can't pull out individual branches \\ and manage them on their own, because only ROOT knows how to interpret \\ a branch's relationship with other branches.
+
+%% \vspace{1 cm}
+%% \uncover<2->{BulkIO can extract branch data as arrays, bypassing the reconstruction into events, but only for certain branch types (``non-destructively serialized'').}
+%% \end{center}
+%% \end{frame}
+
+%% \begin{frame}[fragile]{What would it look like if we could?}
+%% \begin{minted}{sql}
+%% CREATE TABLE derived_data AS
+%%     SELECT pt, eta, phi, deltaphi**2 + deltaeta**2 AS deltaR
+%%     FROM original_data WHERE deltaR < 0.2;
+%% \end{minted}
+
+%% creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it links}, rather than {\it copying}, {\tt pt}, {\tt eta}, and {\tt phi}.\footnote{Implementation dependent, but common. ``{\tt WHERE}'' selection may be implemented with a stencil.}
+
+%% \vspace{0.25 cm}
+%% \uncover<2->{If {\tt original\_data} is deleted, the database would not delete {\tt pt}, {\tt eta}, and {\tt phi}, as they're in use by {\tt derived\_data}.}
+
+%% \vspace{0.5 cm}
+%% \uncover<3->{\textcolor{darkblue}{\underline{For data management,}} this is a flexible system, as columns are a more granular unit for caching and replication.}
+
+%% \vspace{0.25 cm}
+%% \uncover<4->{\textcolor{darkblue}{\underline{For users,}} there is little cost to creating derived datasets, multiple versions of corrections and cuts.}
+%% \end{frame}
+
+%% \begin{frame}{}
+%% \vspace{1 cm}
+%% \begin{center}
+%% \Large \textcolor{darkblue}{\underline{Idea \#1}.} Cast data from ROOT files into a well-known \\ standard for columnar, hierarchical data; manage those \\ columns individually in an object store like Ceph.
+%% \end{center}
+
+%% \begin{enumerate}
+%% \item<2-> \textcolor{darkblue}{Apache Arrow} is one such standard. It's similar to ROOT's splitting format but continues splitting to all levels of depth.
+%% \item<3-> \textcolor{darkblue}{PLUR or PLURP} is my subset of the above with looser rules about how data may be referenced. Acronym for the minimum data model needed for physics: {\bf Primitives}, {\bf Lists}, {\bf Unions}, {\bf Records}, and maybe {\bf Pointers} (beyond Arrow).
+%% \end{enumerate}
+
+%% \begin{center}
+%% \uncover<4->{\Large ``Datacenter groks the data.''}
+%% \end{center}
+%% \end{frame}
 
 \begin{frame}{}
-\vspace{0.5 cm}
-\begin{center}
-\large Except for the simplest cases, we can't pull out individual branches \\ and manage them on their own, because only ROOT knows how to interpret \\ a branch's relationship with other branches.
-
-\vspace{1 cm}
-\uncover<2->{BulkIO can extract branch data as arrays, bypassing the reconstruction into events, but only for certain branch types (``non-destructively serialized'').}
-\end{center}
-\end{frame}
-
-\begin{frame}[fragile]{What would it look like if we could?}
-\begin{minted}{sql}
-CREATE TABLE derived_data AS
-    SELECT pt, eta, phi, deltaphi**2 + deltaeta**2 AS deltaR
-    FROM original_data WHERE deltaR < 0.2;
-\end{minted}
-
-creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it links}, rather than {\it copying}, {\tt pt}, {\tt eta}, and {\tt phi}.\footnote{Implementation dependent, but common. ``{\tt WHERE}'' selection may be implemented with a stencil.}
-
-\vspace{0.25 cm}
-\uncover<2->{If {\tt original\_data} is deleted, the database would not delete {\tt pt}, {\tt eta}, and {\tt phi}, as they're in use by {\tt derived\_data}.}
-
-\vspace{0.5 cm}
-\uncover<3->{\textcolor{darkblue}{\underline{For data management,}} this is a flexible system, as columns are a more granular unit for caching and replication.}
-
-\vspace{0.25 cm}
-\uncover<4->{\textcolor{darkblue}{\underline{For users,}} there is little cost to creating derived datasets, multiple versions of corrections and cuts.}
-\end{frame}
-
-\begin{frame}{}
 \vspace{1 cm}
 \begin{center}
-\Large \textcolor{darkblue}{\underline{Idea \#1}.} Cast data from ROOT files into a well-known \\ standard for columnar, hierarchical data; manage those \\ columns individually in an object store like Ceph.
+\Large \textcolor{darkblue}{\underline{Idea \#2} (this talk).} Keep ROOT data as they are, but put \\ individual {\it baskets} in the object store. TFile/TTree subclasses fetch data from the object store instead of seeking to file positions.
 \end{center}
 
 \begin{enumerate}
-\item<2-> \textcolor{darkblue}{Apache Arrow} is one such standard. It's similar to ROOT's splitting format but splits at all levels of depth.
-\item<3-> \textcolor{darkblue}{PLUR or PLURP}. My subset of the above with looser rules about how data may be referenced. Stands for {\bf Primitives}, {\bf Lists}, {\bf Unions}, {\bf Records}, and maybe {\bf Pointers} (extension beyond Arrow).
+\item<2-> Presents the same TFile/TTree interface to users; old scripts still work.
+\item<3-> But data replication, storage class, and caching are handled by the object store with columnar granularity.
+\item<4-> Branches are shared transparently among derived datasets: friend-by-default.
+\item<5-> The logic of sharing, reference counting branches, managing datasets, etc.\ must all be implemented in ROOT; only ROOT understands how to combine branches.
 \end{enumerate}
 
-\vspace{0.25 cm}
 \begin{center}
-\uncover<4->{\Large ``Datacenter groks the data.''}
+\uncover<6->{\Large ``ROOT eats the world.''}
 \end{center}
 \end{frame}
 
-\begin{frame}{}
-\vspace{1 cm}
-\begin{center}
-\Large \textcolor{darkblue}{\underline{Idea \#2} (this talk).} 
-\end{center}
-
-\begin{enumerate}
-\end{enumerate}
-
-\vspace{0.25 cm}
-\begin{center}
-\uncover<4->{\Large ``ROOT eats the world.''}
-\end{center}
+\begin{frame}{How it could be done}
+\vspace{0.3 cm}
+\begin{itemize}
+\item<1-> Subclass of TFile configures itself by contacting a ``controlling'' database (document store like MongoDB might be best).
+\item<2-> Reference counts for objects referenced by TKeys (including TBaskets and user objects like histograms) are maintained by the controlling database.
+\item<3-> Bulk data, such as TBaskets, are in a ``warehouse'' database (object store--- {\it might} be the same database). Optimal basket size might be big, like megabytes range.
+\item<4-> REST APIs for flexibility. No database clients as new ROOT dependencies. TBaskets are fetched by HTTP GET.
+\item<5-> New TTrees derived from old TTrees\ldots
+\begin{itemize}
+\item<6-> share common TBranch data by default;
+\item<7-> ``soft skim'' by stencil (event list/event bitmap), ``hard skim'' only if re-basketization is needed to compactify results (keeping fewer than $\sim$10\% of original);
+\item<8-> save all provenance and use git-like history to determine to determine if two branches are related/may be combined (join by index, rather than mutual column).
+\end{itemize}
+\item<9-> No user-facing partition boundaries: huge dataset may be one TTree.
+\item<10-> Users work in shared TFile: home TDirectories; permissions managed by database.
+\end{itemize}
 \end{frame}
-
 
 
 \end{document}
