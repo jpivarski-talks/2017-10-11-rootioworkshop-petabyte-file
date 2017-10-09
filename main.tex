@@ -207,5 +207,25 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Modes of use}
+\vspace{0.5 cm}
+\begin{description}\setlength{\itemsep}{0.25 cm}
+\item[Direct connection:] \mbox{ } \\ users launch ROOT, open a {\tt TFile("bigdb://data.cern/cms")}, and extract objects for plotting {\tt Get("home/username/myhist")}.
+\item[Job submission]<2-> \mbox{ } \\ users pass macros, {\tt TTree::Draw} requests, or {\tt TDataFrame} jobs to a service that parallelizes it and puts results in their home TDirectory.
+\end{description}
+
+\mbox{\hspace{0.85 cm}\begin{minipage}{0.9\linewidth}
+\begin{itemize}
+\item<3-> compute nodes use the same interface to communicate with storage;
+\item<4-> but a scheduler attempts to maximize cache locality on the workers.
+\end{itemize}
+\end{minipage}}
+
+\vspace{0.5 cm}
+\begin{center}
+\large \uncover<5->{This is the ``query server'' idea I've been exploring form some time now, \\ except that all of the interface is ROOT.}
+\end{center}
+\end{frame}
+
 
 \end{document}
