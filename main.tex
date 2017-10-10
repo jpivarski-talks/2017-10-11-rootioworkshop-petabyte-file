@@ -30,7 +30,7 @@
 \definecolor{darkgreen}{rgb}{0,0.6,0}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\title[2017-10-11-rootioworkshop-petabyte-file]{How to make a petabyte ROOT file: \\ managing data with columnar granularity}
+\title[2017-10-11-rootioworkshop-petabyte-file]{How to make a petabyte ROOT file: \\ proposal for managing data with columnar granularity}
 \author{Jim Pivarski}
 \institute{Princeton University -- DIANA}
 \date{October 11, 2017}
@@ -72,7 +72,7 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 \vspace{0.1 cm}
 \begin{uncoverenv}<3->
 \begin{center}
-\LARGE This is GREAT.
+\LARGE \underline{This is GREAT.}
 \end{center}
 \end{uncoverenv}
 \end{frame}
@@ -86,7 +86,7 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 \vspace{0.25 cm}
 \begin{uncoverenv}<2->
 \hfill \begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(-200:-1 cm)}, text width=0.65\linewidth] {Not exactly--- we still have to manage data at the level of files, not columns.};
+\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(-200:-1 cm)}, text width=0.65\linewidth] {Not exactly--- we still have to manage data as files, rather than columns.};
 \end{tikzpicture}
 \end{uncoverenv}
 
@@ -107,10 +107,10 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 
 \begin{frame}{Proof that it matters: CMS NanoAOD}
 \vspace{0.75 cm}
-\textcolor{darkblue}{\underline{Stated goal:}} {to serve 30--50\% of CMS analyses with a single selection of columns.}
+\textcolor{darkblue}{\underline{Stated goal:}} {to serve 30--50\% of CMS analyses with a single \underline{selection of columns.}}
 
 \vspace{0.5 cm}
-Painful decisions need to be made to keep disk size down to 1--2~kB/event, to make data access faster for 50\% of analyses while completely excluding others.
+Painful decisions need to be made to keep disk size down to 1--2~kB/event, to make data access easier for 50\% of analyses while completely excluding others.
 
 \vspace{0.5 cm}
 \begin{columns}
@@ -125,6 +125,7 @@ Painful decisions need to be made to keep disk size down to 1--2~kB/event, to ma
 \end{center}
 \end{columns}
 
+\vspace{0.25 cm}
 \begin{center}
 \uncover<4->{There is a steep popularity distribution across {\it columns,} \\ cut abruptly and artificially by what's in a {\it file}.}
 \end{center}
@@ -156,7 +157,7 @@ creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it link
 \uncover<3->{\textcolor{darkblue}{\underline{For data management,}} this is a highly fluid system, as columns are a more granular unit for caching and replication.}
 
 \vspace{0.25 cm}
-\uncover<4->{\textcolor{darkblue}{\underline{For users,}} there is little cost to creating derived datasets, multiple versions of corrections and cuts.}
+\uncover<4->{\textcolor{darkblue}{\underline{For users,}} there is much less cost to creating derived datasets--- many versions of corrections and cuts.}
 \end{frame}
 
 \begin{frame}{}
@@ -184,7 +185,7 @@ creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it link
 \begin{enumerate}
 \item<2-> Presents the same TFile/TTree interface to users; old scripts still work.
 \item<3-> But data replication, storage class, and caching are handled by the object store with columnar granularity.
-\item<4-> Branches are shared transparently among derived datasets: everything's a friend.
+\item<4-> Branches are shared transparently across derived datasets: all trees are friends.
 \item<5-> The logic of sharing, reference counting branches, managing datasets, etc.\ must all be implemented in ROOT; only ROOT understands how to combine branches.
 \end{enumerate}
 
@@ -220,7 +221,7 @@ Users launch ROOT, open a {\tt TFile("rootdb://data.cern/cms")}, and extract obj
 \vspace{0.5 cm}
 \begin{uncoverenv}<2->
 \begin{block}{Job submission}
-Users pass macros, {\tt TTree::Draw} requests, or {\tt TDataFrame} tasks to a service that parallelizes it and puts results in their home TDirectory.
+Users pass macros, {\tt TTree::Draw} requests, or {\tt TDataFrame} tasks to a service that parallelizes them and puts results in the user's home TDirectory.
 
 \begin{itemize}
 \item<3-> compute nodes use this same interface to communicate with storage;
