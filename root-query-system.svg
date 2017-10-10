@@ -361,9 +361,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="685.30613"
-     inkscape:cy="295.96465"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="771.114"
+     inkscape:cy="200.7031"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -388,7 +388,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -664,24 +664,24 @@
        sodipodi:linespacing="125%"
        id="text4023"
        y="661.85718"
-       x="87.425056"
+       x="85.425056"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L"
        xml:space="preserve"><tspan
          style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
          id="tspan4031"
          y="661.85718"
-         x="87.425056"
-         sodipodi:role="line">Get events from TTree</tspan><tspan
+         x="85.425056"
+         sodipodi:role="line">Get TBasket data,</tspan><tspan
          style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
          y="684.35718"
-         x="87.425056"
+         x="85.425056"
          sodipodi:role="line"
-         id="tspan4042">Perform calculation</tspan><tspan
+         id="tspan4042">perform calculation,</tspan><tspan
          style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
          y="706.85718"
-         x="87.425056"
+         x="85.425056"
          sodipodi:role="line"
-         id="tspan4044">Save to &quot;hist&quot; in db</tspan></text>
+         id="tspan4044">save to &quot;hist&quot; in db.</tspan></text>
     <rect
        ry="10"
        rx="10"
@@ -694,25 +694,25 @@
     <text
        xml:space="preserve"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Nimbus Sans L;-inkscape-font-specification:Nimbus Sans L"
-       x="87.064705"
+       x="85.064705"
        y="487.55386"
        id="text4048"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="87.064705"
+         x="85.064705"
          y="487.55386"
          style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
          id="tspan4071">Preferentially send jobs to</tspan><tspan
          sodipodi:role="line"
-         x="87.064705"
+         x="85.064705"
          y="510.05386"
          style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
          id="tspan4078">compute nodes that have the</tspan><tspan
          sodipodi:role="line"
-         x="87.064705"
+         x="85.064705"
          y="532.55383"
          style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;font-family:Droid Sans Mono;-inkscape-font-specification:Droid Sans Mono"
-         id="tspan4080">baskets in cache...</tspan></text>
+         id="tspan4080">TBaskets in cache...</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text4082"

@@ -188,7 +188,7 @@ creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it link
 \begin{frame}{}
 \vspace{1 cm}
 \begin{center}
-\Large \textcolor{darkblue}{\underline{Idea~\#2} (this talk).} Keep ROOT data as they are, but put \\ individual {\it baskets} in the object store. TFile/TTree subclasses fetch data from the object store instead of seeking to file positions.
+\Large \textcolor{darkblue}{\underline{Idea~\#2} (this talk).} Keep ROOT data as they are, but put \\ individual {\it TBaskets} in the object store. TFile/TTree subclasses fetch data from the object store instead of seeking to file positions.
 \end{center}
 
 \begin{enumerate}
@@ -207,30 +207,30 @@ creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it link
 \vspace{0.3 cm}
 \begin{itemize}
 \item<1-> Subclass of TFile initializes itself by getting data from a ``controlling'' database (document store like MongoDB might be best).
-\item<2-> Reference counts for objects referenced by TKeys (including TBaskets and user objects like histograms) are maintained by the controlling database.
+\item<2-> Reference counts for objects referenced by TKeys (including TBaskets and user objects like histograms) are maintained by this controlling database.
 \item<3-> Bulk data, the contents of TKeys, are in a ``warehouse'' database (object store--- \mbox{\it might} be the same database). Optimal basket size may be big, like megabytes.
 \item<4-> REST APIs for flexibility; TBaskets fetched by HTTP GET, may be web-cached. No new ROOT dependencies.
-\item<5-> New methods for deriving new TTrees from old TTrees:
+\item<5-> Methods for deriving new TTrees from old TTrees:
 \begin{itemize}
-\item<6-> share common TBranch data by default;
-\item<7-> ``soft skim'' by stencil (event list/event bitmap), ``hard skim'' only if re-basketization is needed to compactify results (keeping fewer than $\sim$10\% of original);
-\item<8-> save all provenance and use git-like history to determine if two branches are related/may be combined (for a join by index position, rather than mutual column).
+\item<5-> share common TBranch data by default;
+\item<6-> ``soft skim'' by stencil (event list/event bitmap), ``hard skim'' only if re-basketization is needed to compactify results (keeping fewer than $\sim$10\% of original);
+\item<7-> save all provenance and use git-like versioning to determine if two branches are related/may be combined (for a join by index position, rather than mutual column).
 \end{itemize}
-\item<9-> No user-facing partition boundaries: huge dataset appears as one TTree.
-\item<10-> Users work in shared TFile: home TDirectories; permissions managed by database.
+\item<8-> No user-facing partition boundaries: huge dataset appears as one TTree.
+\item<9-> Users work in shared TFile: home TDirectories; permissions managed by database.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Modes of use}
+\begin{frame}{Two modes of use}
 \vspace{0.5 cm}
 \begin{block}{Direct connection}
-Users launch ROOT, open a {\tt TFile("rootdb://data.cern/cms")}, and extract objects for plotting/analysis: {\tt Get("home/username/myhist").Draw()}.
+User launches ROOT, does {\tt TFile::Open("rootdb://data.cern/cms")}, and extracts objects for analysis: {\tt Get("home/username/myhist")->Draw()}.
 \end{block}
 
 \vspace{0.5 cm}
 \begin{uncoverenv}<2->
 \begin{block}{Job submission}
-Users pass macros, {\tt TTree::Draw} requests, or {\tt TDataFrame} tasks to a service that parallelizes them and puts results in the user's home TDirectory.
+User passes a macro, {\tt TTree::Draw} request, or {\tt TDataFrame} to a service that parallelizes it and puts results in the user's home TDirectory.
 
 \begin{itemize}
 \item<3-> compute nodes use this same interface to communicate with storage;
@@ -241,7 +241,7 @@ Users pass macros, {\tt TTree::Draw} requests, or {\tt TDataFrame} tasks to a se
 
 \vspace{0.25 cm}
 \begin{center}
-\large \uncover<5->{This is the ``query server'' idea I've been exploring form some time now, \\ except that all of the interface is ROOT.}
+\large \uncover<5->{This is the ``query server'' idea I've been exploring for some time now, \\ except that all of the interface is ROOT.}
 \end{center}
 \end{frame}
 
