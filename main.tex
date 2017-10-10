@@ -77,7 +77,7 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 \end{uncoverenv}
 \end{frame}
 
-\begin{frame}{Conversation with CS colleague}
+\begin{frame}{Conversation with computer scientist}
 \vspace{0.5 cm}
 \begin{tikzpicture}[>=latex]
 \node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {So it sounds like you already have a columnar database.};
@@ -93,7 +93,7 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 \vspace{0.25 cm}
 \begin{uncoverenv}<3->
 \begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {Why? Couldn't you just use XRootD to move, backup, and cache columns directly? Why does it matter that they're inside of files?};
+\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {Why? Couldn't you just use XRootD to manage (move, backup, cache) columns directly? Why does it matter that they're inside of files?};
 \end{tikzpicture}
 \end{uncoverenv}
 
@@ -105,12 +105,12 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 \end{uncoverenv}
 \end{frame}
 
-\begin{frame}{Proof that it matters: CMS NanoAOD}
+\begin{frame}{Evidence that it matters: the CMS NanoAOD project}
 \vspace{0.75 cm}
 \textcolor{darkblue}{\underline{Stated goal:}} {to serve 30--50\% of CMS analyses with a single \underline{selection of columns.}}
 
 \vspace{0.5 cm}
-Painful decisions need to be made to keep disk size down to 1--2~kB/event, to make data access easier for 50\% of analyses while completely excluding others.
+Painful decisions need to be made to keep size down to 1--2~kB/event, to make data access easier for 50\% of analyses while completely excluding others.
 
 \vspace{0.5 cm}
 \begin{columns}
@@ -127,7 +127,7 @@ Painful decisions need to be made to keep disk size down to 1--2~kB/event, to ma
 
 \vspace{0.25 cm}
 \begin{center}
-\uncover<4->{\textcolor{darkblue}{This is artificial.} \\ There's a steep popularity distribution across columns, \\ but we cut it abruptly with file schemas (data tiers).}
+\uncover<4->{\textcolor{darkblue}{This is artificial.}} \\ \uncover<5->{There's a steep popularity distribution across columns, \\ but we cut it abruptly with file schemas (data tiers).}
 \end{center}
 \end{frame}
 
