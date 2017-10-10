@@ -116,7 +116,7 @@ Painful decisions need to be made to keep disk size down to 1--2~kB/event, to ma
 \begin{columns}
 \column{0.55\linewidth}
 \begin{center}
-\uncover<2->{If we could really manage data at the columnar level, we could just put the most frequently used 1--2~kB/event in warm storage and the other 40~kB/event in colder storage.}
+\uncover<2->{If we could really manage data at the columnar level, we could just put the most frequently used 1--2~kB {\it of each event} in warm storage and the other 40~kB in colder storage.}
 \end{center}
 
 \column{0.4\linewidth}
@@ -127,18 +127,27 @@ Painful decisions need to be made to keep disk size down to 1--2~kB/event, to ma
 
 \vspace{0.25 cm}
 \begin{center}
-\uncover<4->{There is a steep popularity distribution across {\it columns,} \\ cut abruptly and artificially by what's in a {\it file}.}
+\uncover<4->{\textcolor{darkblue}{This is artificial.} \\ There's a steep popularity distribution across columns, \\ but we cut it abruptly with file schemas (data tiers).}
 \end{center}
 \end{frame}
 
 \begin{frame}{}
-\vspace{0.5 cm}
-\begin{center}
-\large Except for the simplest TTree structures, we can't pull individual branches \\ out of a file and manage them on their own, because only ROOT knows how \\ to interpret a branch's relationship with other branches.
-
 \vspace{1 cm}
-\uncover<2->{BulkIO can extract branch data as arrays, bypassing the reconstruction into events, but only for certain branch types (``non-destructively serialized'').}
+\begin{center}
+\large Except for the simplest TTree structures, we can't pull individual branches \\ out of a file and manage them on their own.
 \end{center}
+
+\begin{uncoverenv}<2->
+\begin{tikzpicture}[>=latex]
+\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}] {But you have XRootD!};
+\end{tikzpicture}
+\end{uncoverenv}
+
+\begin{uncoverenv}<3->
+\hfill \begin{tikzpicture}[>=latex]
+\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(-200:-1 cm)}, text width=0.65\linewidth] {Because only ROOT knows how to interpret a branch's relationship with other branches.};
+\end{tikzpicture}
+\end{uncoverenv}
 \end{frame}
 
 \begin{frame}[fragile]{What would it look like if we could?}
@@ -154,7 +163,7 @@ creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it link
 \uncover<2->{If {\tt original\_data} is deleted, the database would not delete {\tt pt}, {\tt eta}, and {\tt phi}, as they're in use by {\tt derived\_data}.}
 
 \vspace{0.5 cm}
-\uncover<3->{\textcolor{darkblue}{\underline{For data management,}} this is a highly fluid system, as columns are a more granular unit for caching and replication.}
+\uncover<3->{\textcolor{darkblue}{\underline{For data management,}} this is a very flexible system, as columns are a more granular unit for caching and replication.}
 
 \vspace{0.25 cm}
 \uncover<4->{\textcolor{darkblue}{\underline{For users,}} there is much less cost to creating derived datasets--- many versions of corrections and cuts.}
@@ -167,12 +176,12 @@ creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it link
 \end{center}
 
 \begin{enumerate}
-\item<2-> \textcolor{darkblue}{Apache Arrow} is one such standard. It's similar to ROOT's splitting format but continues splitting to all levels of depth.
+\item<2-> \textcolor{darkblue}{Apache Arrow} is one such standard. It's similar to ROOT's splitting format but permits $\mathcal{O}(1)$ random access and splits down to all levels of depth.
 \item<3-> \textcolor{darkblue}{PLUR or PLURP} is my subset of the above with looser rules about how data may be referenced. Acronym for the minimum data model needed for physics: {\bf Primitives}, {\bf Lists}, {\bf Unions}, {\bf Records}, and maybe {\bf Pointers} (beyond Arrow).
 \end{enumerate}
 
 \begin{center}
-\uncover<4->{\Large (the ``database-like'' approach)}
+\uncover<4->{\Large (the ``standard database'' approach)}
 \end{center}
 \end{frame}
 
@@ -183,29 +192,29 @@ creates a new {\tt derived\_data} table from {\tt original\_data}, but {\it link
 \end{center}
 
 \begin{enumerate}
-\item<2-> Presents the same TFile/TTree interface to users; old scripts still work.
+\item<2-> Presents the same TFile/TTree interface to users; \textcolor{darkorange}{\bf old scripts still work.}
 \item<3-> But data replication, storage class, and caching are handled by the object store with columnar granularity.
 \item<4-> Branches are shared transparently across derived datasets: all trees are friends.
 \item<5-> The logic of sharing, reference counting branches, managing datasets, etc.\ must all be implemented in ROOT; only ROOT understands how to combine branches.
 \end{enumerate}
 
 \begin{center}
-\uncover<6->{\Large (the ``ROOT eats the world'' approach)}
+\uncover<6->{\Large (the ``ROOT becomes the database'' approach)}
 \end{center}
 \end{frame}
 
 \begin{frame}{How it could be done}
 \vspace{0.3 cm}
 \begin{itemize}
-\item<1-> Subclass of TFile configures itself by contacting a ``controlling'' database (document store like MongoDB might be best).
+\item<1-> Subclass of TFile initializes itself by getting data from a ``controlling'' database (document store like MongoDB might be best).
 \item<2-> Reference counts for objects referenced by TKeys (including TBaskets and user objects like histograms) are maintained by the controlling database.
 \item<3-> Bulk data, the contents of TKeys, are in a ``warehouse'' database (object store--- \mbox{\it might} be the same database). Optimal basket size may be big, like megabytes.
-\item<4-> REST APIs for flexibility. No database clients as new ROOT dependencies. TBaskets are fetched by HTTP GET.
-\item<5-> New TTrees derived from old TTrees\ldots
+\item<4-> REST APIs for flexibility; TBaskets fetched by HTTP GET, may be web-cached. No new ROOT dependencies.
+\item<5-> New methods for deriving new TTrees from old TTrees:
 \begin{itemize}
 \item<6-> share common TBranch data by default;
 \item<7-> ``soft skim'' by stencil (event list/event bitmap), ``hard skim'' only if re-basketization is needed to compactify results (keeping fewer than $\sim$10\% of original);
-\item<8-> save all provenance and use git-like history to determine if two branches are related/may be combined (for a join by index, rather than mutual column).
+\item<8-> save all provenance and use git-like history to determine if two branches are related/may be combined (for a join by index position, rather than mutual column).
 \end{itemize}
 \item<9-> No user-facing partition boundaries: huge dataset appears as one TTree.
 \item<10-> Users work in shared TFile: home TDirectories; permissions managed by database.
