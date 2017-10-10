@@ -93,7 +93,7 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 \vspace{0.25 cm}
 \begin{uncoverenv}<3->
 \begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {Why? Couldn't you just use XRootD to manage (move, backup, cache) columns directly? Why does it matter that they're inside of files?};
+\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(200:1 cm)}, text width=0.65\linewidth] {What? Why? Couldn't you just use XRootD to manage (move, backup, cache) columns directly? Why does it matter that they're inside of files?};
 \end{tikzpicture}
 \end{uncoverenv}
 
@@ -110,13 +110,13 @@ auto file = TFile::Open("root://very.far.away/mydata.root");
 \textcolor{darkblue}{\underline{Stated goal:}} {to serve 30--50\% of CMS analyses with a single \underline{selection of columns.}}
 
 \vspace{0.5 cm}
-Painful decisions need to be made to keep size down to 1--2~kB/event, to make data access easier for 50\% of analyses while completely excluding others.
+Need to make hard decisions about which columns to keep: reducing more makes data access easier for 50\% of analyses while completely excluding the rest.
 
 \vspace{0.5 cm}
 \begin{columns}
 \column{0.55\linewidth}
 \begin{center}
-\uncover<2->{If we could really manage data at the columnar level, we could just put the most frequently used 1--2~kB {\it of each event} in warm storage and the other 40~kB in colder storage.}
+\uncover<2->{If we really had columnar data management, the problem would be moot: we'd just let the most frequently used 1--2~kB {\it of each event} migrate to warm storage while the rest cools.}
 \end{center}
 
 \column{0.4\linewidth}
@@ -145,7 +145,7 @@ Painful decisions need to be made to keep size down to 1--2~kB/event, to make da
 
 \begin{uncoverenv}<3->
 \hfill \begin{tikzpicture}[>=latex]
-\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(-200:-1 cm)}, text width=0.65\linewidth] {Because only ROOT knows how to interpret a branch's relationship with other branches.};
+\node[rectangle callout, draw, inner sep=5 pt, callout relative pointer={(-200:-1 cm)}, text width=0.65\linewidth] {Yes, but only ROOT knows how to interpret a branch's relationship with other branches.};
 \end{tikzpicture}
 \end{uncoverenv}
 \end{frame}
@@ -256,7 +256,7 @@ User passes a macro, {\tt TTree::Draw} request, or {\tt TDataFrame} to a service
 \item[Question:] How would you feel if I developed this kind of service {\it within} ROOT (\textcolor{darkblue}{idea~\#2}), rather than outside of ROOT (\textcolor{darkblue}{idea~\#1})?
 
 \vspace{0.25 cm}
-\uncover<2->{I'd want to sketch it out in Python (uproot) to figure out the architecture before committing to the ROOT codebase: $\sim$year timescale.}
+\uncover<2->{I'd want to sketch it out in Python (my uproot project) to figure out the architecture before committing to the ROOT codebase: $\sim$year timescale.}
 
 \item[Question:]<3-> Deeply nested columnar splitting, zero-copy structure manipulations, and many database indexing techniques are not possible with today's ROOT serialization.
 
